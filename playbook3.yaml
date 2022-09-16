@@ -1,0 +1,24 @@
+---
+- name: Install and Upload Apache Web Server
+  hosts: all
+  become: yes
+
+  vars:
+  source_file: ./index.html
+  destin_file: /var/www/html
+
+  tasks:
+  - name: Install Apache Server
+    yam:  name=httpd stated=latest
+
+  - name: Copy MyHomePage to Servers
+    copy: src{{ source_file }} dest= {{ destin_file }} mode=0555
+    notify: Restart Apache
+
+  - name: Start WebServer and make enable on boot
+    service: name=httpd state=started enabled=yes
+
+
+  handlers: 
+  - name: Restart Apache
+    service: name=httpd state=started

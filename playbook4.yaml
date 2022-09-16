@@ -1,0 +1,35 @@
+---
+- name: Install and Upload Apache Web Server
+  hosts: all
+  become: yes
+
+  vars:
+    message1: Privet
+    message2: World
+    secret  : 123321
+    ovner   : John
+
+  tasks:
+    - name: Print secret
+      debug:
+        var: secret
+    
+    - debug:
+        msg: "slovo {{ secret }}"
+
+    - debug:
+        msg: " Vladelec {{ owner }}"
+
+    - set_fact: full_message= "{{ message1 }} + {{ message2 }} from {{ owner }} "
+
+    - debug:
+        var: full_message
+
+    - debug:
+        var: ansible_distribution
+    
+    - shell: uptime
+        register: results
+   
+    - debug:
+        var: results

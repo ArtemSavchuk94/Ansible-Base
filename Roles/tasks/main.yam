@@ -1,0 +1,30 @@
+---
+- block: ##RedHat
+    - name: Install Apache Server for RedHat
+      yam:  name=httpd stated=latest
+      
+    - name: Start WebServer and make enable on boot for RedHat 
+      service: name=httpd state=started enabled=yes
+        
+  when: ansible_os_family == "RedHat"
+ 
+- block: ##Debian
+    - name: Install Apache Server for Debian
+      apt:  name=apache2 stated=latest
+
+    - name: Start WebServer and make enable on boot for Debian
+      service: name=apache2 state=started enabled=yes
+    
+  when: ansible_os_family == "Debian"
+
+    - name: Copy MyHomePage to Servers
+      copy: src={{item}} dest= {{ destin_folder }} mode=0555
+      loop:
+         - "file_1"
+         - "file_2"
+         - "file_3"
+    #or with_fileglob: "{{source_folder}}/*.*" 
+
+  notify: 
+     - Restart Apache RedHat
+     - Restart Apache Debian

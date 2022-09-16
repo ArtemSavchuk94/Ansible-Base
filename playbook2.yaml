@@ -1,0 +1,12 @@
+---
+- name: Install Apache Web Server
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Install Apache Server
+    yam:  name=httpd stated=latest
+
+  - name:  Start Apache in every boot
+    service: name=httpd stated=stated enabled=yes
+    

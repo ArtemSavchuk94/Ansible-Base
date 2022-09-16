@@ -1,0 +1,22 @@
+---
+- name: Ansible
+  host: all
+  any_errors_fatal: true
+  become: yes
+
+  tasks: 
+  - name: Task Number1
+    yum: name=treee state=latest
+    ignore_errors: yes
+
+  - name: Task Number2
+    shell: echo Hello
+    register: results.rc == 0
+    #feiled_when: "'World' in results.stdout"
+
+  - debug:
+      var: results
+
+  - name: Task Number3
+    shell: echo Privet
+

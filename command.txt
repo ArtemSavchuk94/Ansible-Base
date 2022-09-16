@@ -1,0 +1,31 @@
+ansible -i host.txt all -m ping 
+ansible all -m ping 
+ansible-inventory --list   (all groups list)
+ansible-inventory --graph
+ansible all -m setup (information)
+ansible all -m shell -a "uptime" (shell command)
+ansible all -m command -a "uptime"
+ansible all -m copy -a "scr=file.txt dest=/home mode=777" -b  (copy file sudo)
+ansible all -m file -a "path=/home/file.txt state=absent" -b  (delete file sudo)
+ansible all -m get_url -a "url=https://www dest=/home" -b     (download file sudo)
+ansible all -m yam -a "name=stress state=installed"           (install app sudo)
+ansible all -m yam -a "name=stress state=removed"             (removed app sudo)
+ansible all -m uri -a "url=http://www return_content=yes"     (conect to url)
+ansible all -m service yam -a "name=httpd state=latest" -b    (install apache)
+ansible all -m service -a "name=httpd state=started enabled=yes" -b (start apache)
+ansible server -m shell -a "ls /var" -vvvv                    (logs)
+ansible-doc -l                                                (all command)
+ansible-playbook playbook1.yaml                               (run playbook)
+ansible-galaxy init deploy_apache_web                         (create roll )
+ansible-playbook playbook.yml --extra-var "MYHOST=STAGING"    (create var for playbook)
+ansible-vault encrypt playbook.yml                            (encrypt)
+ansible-vault view playbook.yml                               (view)
+ansible-vault decrypt playbook.yml --ask-vault-pass           (decrypt)
+ansible-vault encrypt string                       
+echo -n "pass" | ansible-vault encrypt string 
+./ec2.py --list  
+./ec2.py --list --refresh-cache
+ansible -i ec2.py eu-west-1 -m ping                           (login server)
+ansible -i ec2.py tag_ENV_STAGING -m ping
+ansible-playbook  -i ec2.py playbook.yaml 
+nano ec2.ini

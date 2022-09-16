@@ -1,0 +1,58 @@
+---
+- name: Install and Upload Apache Web Server
+  hosts: all
+  become: yes
+
+  vars:
+  source_folder: ./MyWeb
+  destin_folder: /var/www/html
+
+  tasks:
+  - name: Check and print Linux version
+    debug: var=ansible_os_family
+
+  - block: ##RedHat
+      - name: Install Apache Server for RedHat
+        yam:  name=httpd stated=latest
+      
+      - name: Start WebServer and make enable on boot for RedHat 
+        service: name=httpd state=started enabled=yes
+        
+    when: ansible_os_family == "RedHat"
+ 
+  - block: ##Debian
+      - name: Install Apache Server for Debian
+        apt:  name=apache2 stated=latest
+
+      - name: Start WebServer and make enable on boot for Debian
+        service: name=apache2 state=started enabled=yes
+    
+    when: ansible_os_family == "Debian"
+
+   
+  - name: Generate HTML file
+    tamplate: src{{ source_folder }}/index.j2 dest= {{ destin_folder }} mode=0555
+    notify: 
+       - Restart Apache RedHat
+       - Restart Apache Debian
+
+  - name: Copy MyHomePage to Servers
+    copy: src{{ source_folder }}/{{item}} dest= {{ destin_folder }} mode=0555
+    loop:
+       - "file_1"
+       - "file_2"
+       - "file_3"
+    #or with_fileglob: "{{source_folder}}/*.*" 
+
+  notify: 
+     - Restart Apache RedHat
+     - Restart Apache Debian
+
+  handlers: 
+  - name: Restart Apache RedHat
+    service: name=httpd state=started
+    when: ansible_os_family == "RedHat"
+  
+  - name: Restart Apache Debian
+    service: name=apache2 state=started
+    when: ansible_os_family == "Debian"

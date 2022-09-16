@@ -1,0 +1,35 @@
+[STAGING_SERVERS_WEB]
+LinuxX1   ansible_host=171.32.8.69  
+LinuxX2   ansible_host=171.32.8.61   password=mysecret
+
+//[STAGING_SERVERS_WEB:vars]    =>group__vars
+ansible_user=ec2-user 
+ansible_ssh_private_key_file=/home/ec2-user/key.pem
+//
+
+[PROD_SERVERS_WEB]
+Linux1   ansible_host=171.32.8.19  
+Linux2   ansible_host=171.32.8.41 
+
+//[PROD_SERVERS_WEB:vars]      =>group__vars
+ansible_user=ec2-user 
+ansible_ssh_private_key_file=/home/ec2-user/key.pem
+//
+
+
+[STAGING_SERVER_DB]
+171.32.123.1
+171.32.41.124
+
+[PROD_SERVERS_DB]
+171.23.45.6
+171.32.53.1
+
+[ALL_SERVERS_DB:children]
+STAGING_SERVER_DB
+PROD_SERVERS_DB
+
+[ALL_SERVERS_DB:vars]
+db_endpoint=xxxxxx.yyyyyyy.com:4151
+owner:John
+location="Huston,TX"
